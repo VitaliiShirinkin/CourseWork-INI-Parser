@@ -1,5 +1,6 @@
 ﻿// Курсовой проект «Парсер INI-файлов»
 
+
 #include <string>
 #include <unordered_map>
 #include <list>
@@ -8,8 +9,10 @@
 #include <algorithm>
 #include <sstream> 
 #include <set> 
+#include <string>
 
-    //функция удаления начальных пробелов
+
+//функция удаления начальных пробелов
 std::string& deleteSpaceBefore(std::string& str) {
     size_t startPosition = str.find_first_not_of(" \t\r\n\v\f");//функция std::string
 
@@ -60,6 +63,10 @@ public:
 
     IniParser(const std::string& fileName) {
         parse(fileName);
+    }
+    ~IniParser()
+    {
+
     }
 
     template <class T>
@@ -136,10 +143,10 @@ private:
                     }
                     else namesOfSections.insert(currentSection.name);
                 }
+                //а если section не имеет закрытия символа ] — игнорировать и вывести предупреждение
                 else {
                     throw std::invalid_argument("Incorrect syntax in line " + std::to_string(lineCount));
-                }
-                //а если section не имеет закрытия символа ] — игнорировать и вывести предупреждение
+                }      
             }
             //считываем ключ=значение
             if (!line.empty()) {
@@ -206,12 +213,14 @@ private:
 
 int main() {
 
+    std::setlocale(LC_ALL, "ru_RU.UTF-8");
+
     try {
         IniParser parser("fin.ini");
         std::string section = "Section2";
-        std::string variable = "var1";
+        std::string variable = "var2";
 
-        auto value = parser.getValue<double>(section, variable);
+        auto value = parser.getValue<std::string>(section, variable);
 
         std::cout << "In " << section << ": " << variable << " = " << value << '\n';
 
